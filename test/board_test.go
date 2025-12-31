@@ -95,17 +95,101 @@ func TestFindEmptyCell(t *testing.T) {
 	})
 }
 
-// TestPrintBoard verifies board printing
+// TestPrintBoard verifies board printing format
 func TestPrintBoard(t *testing.T) {
-	board := utils.NewBoard()
+	t.Run("Simple 1-9 pattern", func(t *testing.T) {
+		board := utils.NewBoard()
 
-	// Fill board with a simple pattern
-	for row := 0; row < 9; row++ {
-		for col := 0; col < 9; col++ {
-			board[row][col] = (row+col)%9 + 1
+		// Fill board with a simple pattern
+		for row := 0; row < 9; row++ {
+			for col := 0; col < 9; col++ {
+				board[row][col] = (row+col)%9 + 1
+			}
 		}
-	}
 
-	// This should not panic/crash
-	utils.PrintBoard(&board)
+		// Expected output
+		expected := "1 2 3 4 5 6 7 8 9\n" +
+			"2 3 4 5 6 7 8 9 1\n" +
+			"3 4 5 6 7 8 9 1 2\n" +
+			"4 5 6 7 8 9 1 2 3\n" +
+			"5 6 7 8 9 1 2 3 4\n" +
+			"6 7 8 9 1 2 3 4 5\n" +
+			"7 8 9 1 2 3 4 5 6\n" +
+			"8 9 1 2 3 4 5 6 7\n" +
+			"9 1 2 3 4 5 6 7 8\n" +
+			"\n"
+
+		// Capture actual output
+		actual := captureOutput(func() {
+			utils.PrintBoard(&board)
+		})
+
+		// Compare
+		if actual != expected {
+			t.Errorf("PrintBoard() output mismatch")
+			t.Logf("Expected:\n%s", expected)
+			t.Logf("Got:\n%s", actual)
+		}
+	})
+
+	t.Run("Empty board (all zeros)", func(t *testing.T) {
+		board := utils.NewBoard()
+
+		// Expected: all zeros
+		expected := "0 0 0 0 0 0 0 0 0\n" +
+			"0 0 0 0 0 0 0 0 0\n" +
+			"0 0 0 0 0 0 0 0 0\n" +
+			"0 0 0 0 0 0 0 0 0\n" +
+			"0 0 0 0 0 0 0 0 0\n" +
+			"0 0 0 0 0 0 0 0 0\n" +
+			"0 0 0 0 0 0 0 0 0\n" +
+			"0 0 0 0 0 0 0 0 0\n" +
+			"0 0 0 0 0 0 0 0 0\n" +
+			"\n"
+
+		actual := captureOutput(func() {
+			utils.PrintBoard(&board)
+		})
+
+		if actual != expected {
+			t.Errorf("PrintBoard() empty board output mismatch")
+			t.Logf("Expected:\n%s", expected)
+			t.Logf("Got:\n%s", actual)
+		}
+	})
+
+	t.Run("Solved sudoku example", func(t *testing.T) {
+		board := utils.Board{
+			{3, 9, 6, 2, 4, 5, 7, 8, 1},
+			{1, 7, 8, 3, 6, 9, 5, 2, 4},
+			{5, 2, 4, 8, 1, 7, 3, 9, 6},
+			{2, 8, 7, 9, 5, 1, 6, 4, 3},
+			{9, 3, 1, 4, 8, 6, 2, 7, 5},
+			{4, 6, 5, 7, 2, 3, 9, 1, 8},
+			{7, 1, 2, 6, 3, 8, 4, 5, 9},
+			{6, 5, 9, 1, 7, 4, 8, 3, 2},
+			{8, 4, 3, 5, 9, 2, 1, 6, 7},
+		}
+
+		expected := "3 9 6 2 4 5 7 8 1\n" +
+			"1 7 8 3 6 9 5 2 4\n" +
+			"5 2 4 8 1 7 3 9 6\n" +
+			"2 8 7 9 5 1 6 4 3\n" +
+			"9 3 1 4 8 6 2 7 5\n" +
+			"4 6 5 7 2 3 9 1 8\n" +
+			"7 1 2 6 3 8 4 5 9\n" +
+			"6 5 9 1 7 4 8 3 2\n" +
+			"8 4 3 5 9 2 1 6 7\n" +
+			"\n"
+
+		actual := captureOutput(func() {
+			utils.PrintBoard(&board)
+		})
+
+		if actual != expected {
+			t.Errorf("PrintBoard() solved sudoku output mismatch")
+			t.Logf("Expected:\n%s", expected)
+			t.Logf("Got:\n%s", actual)
+		}
+	})
 }
