@@ -116,8 +116,8 @@ sudoku/
 
 ```bash
 # Clone the repository
-git clone https://github.com/IbsYoussef/sudoku.git
-cd sudoku
+git clone https://github.com/IbsYoussef/Sudoku-Raid.git
+cd Sudoku-Raid
 
 # Download dependencies
 go mod download
